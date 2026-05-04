@@ -13,24 +13,12 @@ const config: Config = {
   coverageDirectory: "coverage",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   collectCoverageFrom: [
-    "**/*.{js,jsx,ts,tsx}",
+    "components/**/*.{js,jsx,ts,tsx}",
+    "lib/**/*.{js,ts}",
     "!**/*.d.ts",
     "!**/node_modules/**",
-    "!**/.next/**",
-    "!**/out/**",
-    "!**/build/**",
-    "!**/next-env.d.ts",
-    "!**/jest.config.ts",
-    "!**/jest.setup.ts",
-    "!**/__test__/**",
-    "!**/coverage/**",
-    "!**/public/**",
-    "!**/next.config.ts",
-    "!**/app/layout.tsx",
-    "!**/app/**",
-    "!**/types/**",
+    "!**/*.test.{js,jsx,ts,tsx}",
   ],
-
   moduleNameMapper: {
     // ...
     "^@/(.*)$": "<rootDir>/$1",

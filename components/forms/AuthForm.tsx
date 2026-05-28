@@ -3,29 +3,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  DefaultValues,
-  FieldValues,
-  Path,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { DefaultValues, FieldValues, Path, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import ROUTES from "@/constants/routes";
 import { toast } from "sonner";
 import { ActionResponse } from "@/types/global";
-
 interface AuthFormProps<TFormValues extends FieldValues> {
   schema: z.ZodObject<z.ZodRawShape>;
   defaultValues: TFormValues;
@@ -37,14 +23,14 @@ const AuthForm = <TFormValues extends FieldValues>({
   schema,
   defaultValues,
   formType,
-  onSubmit,
+  onSubmit
 }: AuthFormProps<TFormValues>) => {
   const router = useRouter();
   type FormValues = FieldValues;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues as DefaultValues<FormValues>,
+    defaultValues: defaultValues as DefaultValues<FormValues>
   });
 
   const handleSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -52,16 +38,13 @@ const AuthForm = <TFormValues extends FieldValues>({
 
     if (result?.success) {
       toast("Success", {
-        description:
-          formType === "SIGN_IN"
-            ? "Signed in successfully"
-            : "Signed up successfully",
+        description: formType === "SIGN_IN" ? "Signed in successfully" : "Signed up successfully"
       });
 
       router.push(ROUTES.HOME);
     } else {
       toast(`Error ${result?.status}`, {
-        description: result?.error?.message,
+        description: result?.error?.message
       });
     }
   };
@@ -70,10 +53,7 @@ const AuthForm = <TFormValues extends FieldValues>({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="mt-10 space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-10 space-y-6">
         {Object.keys(defaultValues).map((field) => (
           <FormField
             key={field}
@@ -82,9 +62,7 @@ const AuthForm = <TFormValues extends FieldValues>({
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-2.5">
                 <FormLabel className="paragraph-medium text-dark400_light700">
-                  {field.name === "email"
-                    ? "Email Address"
-                    : field.name.charAt(0).toUpperCase() + field.name.slice(1)}
+                  {field.name === "email" ? "Email Address" : field.name.charAt(0).toUpperCase() + field.name.slice(1)}
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -104,30 +82,20 @@ const AuthForm = <TFormValues extends FieldValues>({
           disabled={form.formState.isSubmitting}
           className="primary-gradient paragraph-medium min-h-12 w-full rounded-2 px-4 py-3 font-inter !text-light-900"
         >
-          {form.formState.isSubmitting
-            ? buttonText === "Sign In"
-              ? "Signin In..."
-              : "Signing Up..."
-            : buttonText}
+          {form.formState.isSubmitting ? (buttonText === "Sign In" ? "Signin In..." : "Signing Up...") : buttonText}
         </Button>
 
         {formType === "SIGN_IN" ? (
           <p>
             Don&apos;t have an account?{" "}
-            <Link
-              href={ROUTES.SIGN_UP}
-              className="paragraph-semibold primary-text-gradient"
-            >
+            <Link href={ROUTES.SIGN_UP} className="paragraph-semibold primary-text-gradient">
               Sign up
             </Link>
           </p>
         ) : (
           <p>
             Already have an account?{" "}
-            <Link
-              href={ROUTES.SIGN_IN}
-              className="paragraph-semibold primary-text-gradient"
-            >
+            <Link href={ROUTES.SIGN_IN} className="paragraph-semibold primary-text-gradient">
               Sign in
             </Link>
           </p>

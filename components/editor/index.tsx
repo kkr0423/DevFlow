@@ -1,6 +1,6 @@
 "use client";
 
-import type { ForwardedRef } from "react";
+import { useRef, type ForwardedRef } from "react";
 import {
   headingsPlugin,
   listsPlugin,
@@ -28,7 +28,7 @@ import {
   imagePlugin,
   codeBlockPlugin,
   codeMirrorPlugin,
-  diffSourcePlugin,
+  diffSourcePlugin
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import "./dark-editor.css";
@@ -59,7 +59,7 @@ export default function Editor({ ref, ...props }: Props & MDXEditorProps) {
         tablePlugin(),
         imagePlugin(),
         codeBlockPlugin({
-          defaultCodeBlockLanguage: "",
+          defaultCodeBlockLanguage: ""
         }),
         codeMirrorPlugin({
           codeBlockLanguages: {
@@ -75,10 +75,10 @@ export default function Editor({ ref, ...props }: Props & MDXEditorProps) {
             ts: "typescript",
             "": "unspecified",
             tsx: "Typescript (React)",
-            jsx: "Javascript (React)",
+            jsx: "Javascript (React)"
           },
           autoLoadLanguageSupport: true,
-          codeMirrorExtensions: theme,
+          codeMirrorExtensions: theme
         }),
         diffSourcePlugin({ viewMode: "rich-text", diffMarkdown: "" }),
         toolbarPlugin({
@@ -87,7 +87,7 @@ export default function Editor({ ref, ...props }: Props & MDXEditorProps) {
               options={[
                 {
                   when: (editor) => editor?.editorType === "codeblock",
-                  contents: () => <ChangeCodeMirrorLanguage />,
+                  contents: () => <ChangeCodeMirrorLanguage />
                 },
                 {
                   fallback: () => (
@@ -110,12 +110,12 @@ export default function Editor({ ref, ...props }: Props & MDXEditorProps) {
 
                       <InsertCodeBlock />
                     </>
-                  ),
-                },
+                  )
+                }
               ]}
             />
-          ),
-        }),
+          )
+        })
       ]}
       {...props}
     />

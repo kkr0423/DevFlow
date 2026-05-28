@@ -23,7 +23,7 @@ describe("Button Component - TTD Approach", () => {
   it("should render the button with the correct variant", () => {
     render(<Button variant="destructive">Click me</Button>);
     const button = screen.getByText("Click me");
-    expect(button).toHaveClass("bg-red-500");
+    expect(button).toHaveClass("bg-destructive");
   });
 
   it("should render the button with the correct disabled state", () => {

@@ -11,10 +11,10 @@ interface Props {
   showActionBtns?: boolean;
 }
 
-const QuestionCard = ({
+function QuestionCard({
   question: { _id, title, tags, author, createdAt, upvotes, answers, views },
-  showActionBtns = false,
-}: Props) => {
+  showActionBtns = false
+}: Props) {
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11 ">
       <div className="flex flex-col-reverse items-center justify-between gap-5 sm:flex-row">
@@ -23,9 +23,7 @@ const QuestionCard = ({
             {getTimeStamp(createdAt)}
           </span>
           <Link href={ROUTES.QUESTION(_id)}>
-            <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
-              {title}
-            </h3>
+            <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">{title}</h3>
           </Link>
         </div>
 
@@ -76,6 +74,6 @@ const QuestionCard = ({
       </div>
     </div>
   );
-};
+}
 
 export default QuestionCard;

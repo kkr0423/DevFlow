@@ -5,13 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { useRef, useState, useTransition } from "react";
 import { AnswerSchema } from "@/lib/validations";
 import dynamic from "next/dynamic";
@@ -24,7 +18,7 @@ import { useSession } from "next-auth/react";
 import { api } from "@/lib/api";
 
 const Editor = dynamic(() => import("@/components/editor"), {
-  ssr: false,
+  ssr: false
 });
 
 interface Props {
@@ -42,21 +36,21 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
 
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: standardSchemaResolver(AnswerSchema),
-    defaultValues: { content: "" },
+    defaultValues: { content: "" }
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
     startAnsweringTransition(async () => {
       const result = await createAnswer({
         questionId,
-        content: values.content,
+        content: values.content
       });
 
       if (result.success) {
         form.reset();
 
         toast("Success", {
-          description: "Your answer has been posted successfully",
+          description: "Your answer has been posted successfully"
         });
 
         if (editorRef.current) {
@@ -65,7 +59,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
         }
       } else {
         toast("Error", {
-          description: "An error occurred while posting your answer",
+          description: "An error occurred while posting your answer"
         });
       }
     });
@@ -74,7 +68,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   const generateAIAnswer = async () => {
     if (session.status !== "authenticated") {
       return toast("Please log in", {
-        description: "You need to be logged in to use this feature",
+        description: "You need to be logged in to use this feature"
       });
     }
     setIsAISubmitting(true);
@@ -82,15 +76,11 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
     const userAnswer = editorRef.current?.getMarkdown() ?? "";
 
     try {
-      const { success, data, error } = await api.ai.getAnswer(
-        questionTitle,
-        questionContent,
-        userAnswer
-      );
+      const { success, data, error } = await api.ai.getAnswer(questionTitle, questionContent, userAnswer);
 
       if (!success) {
         return toast("Error", {
-          description: error?.message,
+          description: error?.message
         });
       }
 
@@ -104,14 +94,11 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
       }
 
       toast("Success", {
-        description: "AI generated answer has been generated",
+        description: "AI generated answer has been generated"
       });
     } catch (error) {
       toast("Error", {
-        description:
-          error instanceof Error
-            ? error.message
-            : "There was a problem with your request",
+        description: error instanceof Error ? error.message : "There was a problem with your request"
       });
     } finally {
       setIsAISubmitting(false);
@@ -121,9 +108,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   return (
     <div>
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
-        <h4 className="paragraph-semibold text-dark400_light800">
-          Write your answer here
-        </h4>
+        <h4 className="paragraph-semibold text-dark400_light800">Write your answer here</h4>
         <Button
           className="btn light-border-2 gap-1.5 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
           disabled={isAISubmitting}
@@ -149,21 +134,14 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
         </Button>
       </div>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          className="mt-6 flex w-full flex-col gap-10"
-        >
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6 flex w-full flex-col gap-10">
           <FormField
             control={form.control}
             name="content"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
                 <FormControl>
-                  <Editor
-                    markdown={field.value}
-                    ref={editorRef}
-                    onChange={field.onChange}
-                  />
+                  <Editor markdown={field.value} ref={editorRef} onChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -171,7 +149,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
           />
 
           <div className="flex justify-end">
-            <Button type="submit" className="primary-gradient w-fit">
+            <Button type="submit" className="primary-gradient w-fit" disabled={isAnswering}>
               {isAnswering ? (
                 <>
                   <ReloadIcon className="mr-2 size-4 animate-spin" />

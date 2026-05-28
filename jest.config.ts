@@ -2,27 +2,64 @@ import type { Config } from "jest";
 import nextJest from "next/jest.js";
 
 const createJestConfig = nextJest({
-  dir: "./",
+  dir: "./"
 });
 
 const config: Config = {
-  coverageProvider: "v8",
-  testEnvironment: "jsdom",
-  clearMocks: true,
+  verbose: true,
+  projects: [
+    {
+      displayName: "client",
+      //Enables to clear the called record for mock
+      clearMocks: true,
+      testEnvironment: "jsdom",
+      // transformIgnorePatterns: ["/node_modules/(?!(bson|mongodb|mongoose)/)"],
+      //Match the name of the test file.
+      testMatch: [
+        "**/tests/unit/**/*.+(test|spec).[jt]s?(x)",
+        "**/tests/integration/**/*.client.+(test|spec).[jt]s?(x)",
+        "**/*.client.+(test|spec).[jt]s?(x)"
+      ],
+      //Enables Jest to understand React, Typescript, and Next.js with babel
+      transform: {
+        "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }]
+      },
+      //Enables Jest to understand the path alias of Next.js
+      moduleNameMapper: {
+        "^@/(.*)$": "<rootDir>/$1"
+      },
+      //Define the initialization file common to all tests
+      setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+      testPathIgnorePatterns: [".*\\.server\\.(test|spec)\\.[jt]s?(x)$"]
+    },
+    {
+      displayName: "server",
+      clearMocks: true,
+      testEnvironment: "node",
+      testMatch: ["**/tests/integration/**/*.server.+(test|spec).[jt]s?(x)", "**/*.server.+(test|spec).[jt]s?(x)"],
+      testPathIgnorePatterns: [".*\\.client\\.(test|spec)\\.[jt]s?(x)$"],
+      moduleNameMapper: {
+        "^@/(.*)$": "<rootDir>/$1"
+      },
+      setupFilesAfterEnv: ["<rootDir>/jest.server.setup.ts"],
+      transform: {
+        "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }]
+      }
+    }
+  ],
   collectCoverage: true,
   coverageDirectory: "coverage",
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  coverageReporters: ["html", ["text", { skipFull: true }], "text-summary"],
+  //Files to include in coverage
   collectCoverageFrom: [
     "components/**/*.{js,jsx,ts,tsx}",
     "lib/**/*.{js,ts}",
+    "app/**/*.{js,jsx,ts,tsx}",
     "!**/*.d.ts",
     "!**/node_modules/**",
     "!**/*.test.{js,jsx,ts,tsx}",
-  ],
-  moduleNameMapper: {
-    // ...
-    "^@/(.*)$": "<rootDir>/$1",
-  },
+    "!**/*.spec.{js,jsx,ts,tsx}"
+  ]
 };
 
 export default createJestConfig(config);

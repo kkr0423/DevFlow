@@ -9,7 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { deleteAnswer } from "@/lib/actions/answer.action";
 import { deleteQuestion } from "@/lib/actions/question.action";
@@ -22,7 +22,7 @@ interface Props {
   itemId: string;
 }
 
-const EditDeleteAction = ({ type, itemId }: Props) => {
+function EditDeleteAction({ type, itemId }: Props) {
   const router = useRouter();
 
   const handleEdit = async () => {
@@ -33,22 +33,18 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
     if (type === "Question") {
       await deleteQuestion({ questionId: itemId });
       toast("Question deleted", {
-        description: "Your question has been deleted successfully.",
+        description: "Your question has been deleted successfully."
       });
       await deleteAnswer({ answerId: itemId });
     } else if (type === "Answer") {
       toast("Answer deleted", {
-        description: "Your answer has been deleted successfully.",
+        description: "Your answer has been deleted successfully."
       });
     }
   };
 
   return (
-    <div
-      className={`flex item-center justify-end gap-3 max-sm:w-full ${
-        type === "Answer" && "gap-0 justify-center"
-      }`}
-    >
+    <div className={`flex item-center justify-end gap-3 max-sm:w-full ${type === "Answer" && "gap-0 justify-center"}`}>
       {type === "Question" && (
         <Image
           src="/icons/edit.svg"
@@ -69,16 +65,12 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete your
-              {type === "Question" ? " question" : " answer"} and remove it from
-              our servers.
+              {type === "Question" ? " question" : " answer"} and remove it from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="btn">Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="!border-primary-100 !bg-primary-500 !text-light-800"
-              onClick={handleDelete}
-            >
+            <AlertDialogAction className="!border-primary-100 !bg-primary-500 !text-light-800" onClick={handleDelete}>
               Continue
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -86,6 +78,6 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
       </AlertDialog>
     </div>
   );
-};
+}
 
 export default EditDeleteAction;
